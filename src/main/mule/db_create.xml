@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b74ae803-9a4c-49a9-b1a0-c538a84d5893" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="d6bbc115-74b2-45fd-a46e-ed0dfd79bc9c" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config1" doc:name="Database Config" doc:id="787c55d4-a80d-4cfc-835e-f98c052009a9" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678"/>
+	</db:config>
+	<db:config name="Database_Config2" doc:name="Database Config" doc:id="f68f260a-e75f-4820-8db5-76070e685026" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config3" doc:name="Database Config" doc:id="50f0e753-2d37-40e7-8866-38935aa03c9b" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config4" doc:name="Database Config" doc:id="08e6f487-481c-4d73-933a-b8da3cb364a8" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config5" doc:name="Database Config" doc:id="1858539c-c68b-4c16-8e3b-052f9b7c5a5c" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config6" doc:name="Database Config" doc:id="709c9bb6-331f-4a50-a6b7-6b7563924dc8" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<db:config name="Database_Config7" doc:name="Database Config" doc:id="aa1377c8-a7a9-47c0-8b66-696216f7e19b" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="12345678" />
+	</db:config>
+	<flow name="db_createFlow" doc:id="63c9842d-72f6-451a-8338-270c433ef80d" >
+		<http:listener doc:name="Listener" doc:id="92681fc4-4d3e-4012-9826-cf17081917de" config-ref="HTTP_Listener_config" path="/create" allowedMethods="POST"/>
+		<db:insert doc:name="Insert" doc:id="77bf8fb5-47ca-4f26-b0f3-b145ad21e1ce" config-ref="Database_Config7">
+			<db:sql ><![CDATA[insert into arvndu1.emp(Empname,Empid,Empage,Empdep)values(:Empname,:Empid,:Empage,:Empdep)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	Empname : payload.Empname,
+	Empid : payload.Empid,
+	Empage : payload.Empage,
+	Empdep : payload.Empdep
+}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="114242b4-842a-4aef-a3c6-f35468334e5b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"status" : 200,
+"message" : "success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
